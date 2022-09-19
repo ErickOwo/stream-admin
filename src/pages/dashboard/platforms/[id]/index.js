@@ -36,15 +36,15 @@ const ModifyPlace = () => {
           </p>
         </div>
         <div className="options h-10 mt-6">
-          <Link href="/dashboard">
+          <Link href="/dashboard/platforms">
             <button className="mt-4 mr-3 rounded-md text-md py-2 px-3 bg-sky-100 text-gray-800 text white">Volver</button>
           </Link>
-          <Link href={`/dashboard/${platform?._id}/modify`}>
+          <Link href={`/dashboard/platforms/${platform?._id}/modify`}>
             <button className="mt-4 mr-3 rounded-md text-md py-2 px-3 bg-sky-100 text-gray-800 text white">Editar</button>
           </Link>
           <button
             onClick={() => {
-              if (confirm('Está seguro que desea eliminar la plataforma')) deleteObject(`${endPoinst.platforms.api}/${id}`).then((res) => router.push('/'));
+              if (confirm('Está seguro que desea eliminar la plataforma')) deleteObject(`${endPoinst.platforms.api}/${id}`).then((res) => router.push('/dashboard/platforms'));
             }}
             className="mt-4 mr-3 rounded-md text-md py-2 px-3 bg-sky-100 text-gray-800 text white"
           >

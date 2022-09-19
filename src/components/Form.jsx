@@ -2,30 +2,40 @@ import { addObject, putObject } from '@api/requests';
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import endPoinst from '@api/index';
+import Select from 'react-select';
 
 const Form = ({ formData, formNewMovie = true, }) => {
   const formRef = useRef(null);
   const [error, setError] = useState(null);
+  const [typeStream, setTypeStream] = useState(null);
+  
   const router = useRouter();
   const { id } = router.query;
 
+  const handleChange = e =>{
+    setTypeStream(e.value);
+  }
+  
+
   const  handleSubmit = e =>{
     e.preventDefault();
+    if (typeStream == null) return setError('Type required')
     const formData = new FormData(formRef.current);
     const data = {
       title: formData.get('title'),
       email: formData.get('email'),
       password: formData.get('password'),
+      type: typeStream,
     }
     if(formNewMovie) {
       addObject(endPoinst.platforms.api, data).then(res =>{
-        router.push("/dashboard");
+        router.push("/dashboard/platforms");
       }).catch(e=>{
         setError(Object.entries(e.response.data.error.errors)[0][1].message)
       });
     } else {
       putObject(`${endPoinst.platforms.api}/${id}`, data).then(res =>{
-        router.push("/dashboard");
+        router.push("/dashboard/platforms");
       }).catch(e=>{
         setError(Object.entries(e.response.data.error.errors)[0][1].message)
       });
@@ -64,6 +74,36 @@ const Form = ({ formData, formNewMovie = true, }) => {
         className='max-w-[370px] w-5/6 p-1 outline-slate-600'  
         placeholder='Password' 
         autoComplete='off' />
+      <label 
+        className='text-white text-lg font-bold mb-3 mt-2 max-w-[370px] w-5/6' 
+        htmlFor='type'>Choose Type</label>
+      <Select 
+        id="type" 
+        name='type' 
+        className='max-w-[370px] w-5/6 p-1 outline-slate-600'  
+        options={[
+          {
+            value: 0,
+            label: 'Disney+' 
+          },
+          {
+            value: 1,
+            label: 'HBO MAX' 
+          },
+          {
+            value: 2,
+            label: 'Prime Video' 
+          },
+          {
+            value: 3,
+            label: 'Paramount+' 
+          },
+          {
+            value: 4,
+            label: 'Star+' 
+          }
+        ]}
+        onChange={handleChange} />
       { error ? <span 
         className='h-6 text-red-600 text-lg mt-3 max-w-[370px] w-5/6'>{ error }</span> : <span 
         className='h-6 mt-3'></span>}

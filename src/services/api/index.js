@@ -9,6 +9,9 @@ const endPoinst = {
   platforms: {
     api: `${API}/admin/platforms`,
   },
+  orders: {
+    api: `${API}/admin/orders`,
+  },
   mailer: {
     api: `${API}/admin/email/send`,
   },
