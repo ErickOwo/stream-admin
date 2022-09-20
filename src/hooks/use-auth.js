@@ -67,7 +67,6 @@ const useProviderAuth = () => {
       if (e.response?.data?.error) {
         setError(e.response.data.error);
       } else {
-        console.log(e);
         setError('Error en la API');
       }
     }
@@ -97,7 +96,7 @@ const useProviderAuth = () => {
       const { data: userProfile } = await axios(endPoints.auth.profile);
       setUser(userProfile);
       return 'ok';
-    } catch (e) {
+    } catch (error) {
       logOut();
       return error;
     }
