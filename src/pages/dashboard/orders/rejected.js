@@ -2,11 +2,19 @@ import useSWR from 'swr';
 import endPoinst from '@api/index';
 import { getData } from '@api/requests';
 import Image from 'next/image';
+import axios from 'axios';
 
 import Order from '@components/Order';
 
 const OrdersNoPending = () => {
-  const { data } = useSWR(endPoinst.orders.api + '/nopending', getData);
+  const { data } = useSWR(endPoinst.orders.api + '/rejected', getData);
+
+  const handleDelete = async (id) => {
+    if (!confirm('Do you want to DELETE the order?')) return;
+    const { data } = await axios.delete(`${endPoinst.orders.api}/${id}`);
+
+    alert(data);
+  };
 
   return (
     <div className="min-h-screen w-full p-4 flex flex-col items-center gap-4">
@@ -73,6 +81,14 @@ const OrdersNoPending = () => {
               <Image src={order.imgURL} width="400%" height="100%" />
             </div>
           </div>
+          <button
+            className="bg-red-600 text-white p-2 rounded-lg"
+            onClick={() => {
+              handleDelete(order._id);
+            }}
+          >
+            Delete
+          </button>
         </div>
       ))}
     </div>

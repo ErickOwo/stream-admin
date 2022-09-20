@@ -40,7 +40,7 @@ const OrdersPending = () => {
 
   return (
     <>
-      <div className="min-h-screen w-full p-4 flex flex-col items-center">
+      <div className="min-h-screen w-full p-4 flex flex-col items-center gap-4">
         {data?.map((order, index) => (
           <div className="bg-[#F1F1F1] p-4 md:my-6 rounded-lg w-full max-w-[600px] flex flex-col gap-1" key={index}>
             <div className="flex flex-wrap gap-3 justify-between">
@@ -86,6 +86,18 @@ const OrdersPending = () => {
                 </p>
               </div>
             )}
+            {order.total ? (
+              <div className="flex justify-between pr-2 text-xl font-semibold">
+                <h4>Total:</h4>
+                <p className="font-sans text-gray-800 tracking-wider">Q. {order.total}.00</p>
+              </div>
+            ) : null}
+            <div className="flex justify-between pr-2 text-xl font-semibold">
+              <h4>Estado:</h4>
+              <p className={`font-sans text-gray-800 tracking-wider ${order.pending ? 'text-yellow-700' : order.accepted ? 'text-green-700' : 'text-red-700'}`}>
+                {order.pending ? 'Pending' : order.accepted ? 'Accepted' : 'Rejected'}
+              </p>
+            </div>
             <div className="flex flex-col">
               <h4 className="text-xl font-semibold">Pago:</h4>
               <div className="flex justify-center h-[420px] w-full">

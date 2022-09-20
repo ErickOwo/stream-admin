@@ -18,10 +18,10 @@ const ModalResponse = ({ active, closeModal, user, platforms, id, order }) => {
 
   const [qrCode, setQRCode] = useState(null);
 
-  const getQRCode = async () => {
-    const {data} = await axios(endPoinst.orders.api + 'qrcode')
-    setQRCode(data);
-  }
+  // const getQRCode = async () => {
+  //   const {data} = await axios(endPoinst.orders.api + 'qrcode')
+  //   setQRCode(data);
+  // }
 
   const options = platforms.map(platform => {
     return {
@@ -66,6 +66,20 @@ const ModalResponse = ({ active, closeModal, user, platforms, id, order }) => {
   const handleChange = e => {
     setPlatformsInput(e)
   }
+
+  const rejectOrder = async () => {
+    try {
+      if(!confirm('Are you sure that you want to reject the order?')) return;
+      const response = await axios.patch(endPoinst.orders.api + `/${id}`);
+      setMessage({type: "success", text: response.data})
+      setTimeout(()=> {
+        closeModal();
+        setMessage(null);
+      }, 1000)
+    } catch (error) {
+      console.log(error)
+    }
+  }
   
   const handleSubmit = async e => {
     e.preventDefault();
@@ -80,9 +94,12 @@ const ModalResponse = ({ active, closeModal, user, platforms, id, order }) => {
       order: `${id}`,
     }
 
-    const res = await axios.put(endPoinst.orders.api, data)
-
-    console.log(res.data)
+    try {
+      const res = await axios.put(endPoinst.orders.api, data)  
+      setMessage({text: res.data, type: 'success'})
+    } catch (error) {
+      setMessage({type: 'error', text: 'Fallo en la API'})
+    }
     // try {
     //    await getQRCode();
     //    setMessage({ type: 'success', text: 'Sent message' })
@@ -103,7 +120,7 @@ const ModalResponse = ({ active, closeModal, user, platforms, id, order }) => {
 
     return (
     <motion.div
-      className="h-screen w-full flex justify-center items-center bg-black/40 fixed top-0 left-0"
+      className="h-screen w-full flex justify-center items-start pt-10 bg-black/40 fixed top-0 left-0"
       initial={{ opacity: 0.5 }}
       variants={variantsOverlay}
       animate={active ? 'show' : 'hidde'}>
@@ -111,14 +128,14 @@ const ModalResponse = ({ active, closeModal, user, platforms, id, order }) => {
           initial={{ scale: 0.7 }}
           variants={variantsModal}
           animate={active ? 'show' : 'hidde'}
-          className={ `bg-white w-full max-w-[1100px] border-2 p-4 border-red-700` }
+          className={ `bg-white w-full max-w-[1100px] border-2 p-4 border-blue-700` }
             >
             <div className="mb-3">
               <h3
                 className={ `border-b p-2 font-semibold text-2xl
-                ${true ? 'border-red-700' : 'border-green-600'}` }
+                ${true ? 'border-blue-700' : 'border-green-600'}` }
                   >
-                  Asignar Plataformas
+                  Asign Platforms
               </h3>
               <p className="font-semibold">Order No. { order }</p>
             </div>
@@ -137,11 +154,11 @@ const ModalResponse = ({ active, closeModal, user, platforms, id, order }) => {
               ref={ formRef }
               onSubmit={ handleSubmit }
               className={ `border p-2 mt-2 flex flex-col
-              ${true ? 'border-red-700' : 'border-green-600'}` }
+              ${true ? 'border-blue-700' : 'border-green-600'}` }
                 >
                 <div className="flex gap-2">
-                  <label className="" htmlFor="platforms">
-                    Plataformas
+                  <label className="text-lg font-semibold tracking-wider " htmlFor="platforms">
+                    Platforms
                   </label>
                   <Select
                     id="platforms"
@@ -149,22 +166,31 @@ const ModalResponse = ({ active, closeModal, user, platforms, id, order }) => {
                     isMulti
                     options={options}
                     className={ `border w-full
-                    ${true ? 'border-red-700' : 'border-green-600'}` }
+                    ${true ? 'border-blue-700' : 'border-green-600'}` }
                     onChange={handleChange} />
                 </div>
-                <div className="flex justify-end items-end gap-2">
                   {
-                    message ? <div className={`mr-auto ${message.type == 'error' ? 'text-green-600' : 'text-red-600'}`}> { message.text } </div> : null
+                    message ? <div className={`h-8 mt-2 ${message.type == 'success' ? 'text-green-600' : 'text-red-600'}`}> { message.text } </div> : <div className="h-8 mt-2"></div>
                   }
+                <div className="flex justify-end items-end gap-2">
+                  <button
+                    onClick={()=> {
+                      rejectOrder()
+                    }}
+                    type="button"
+                    className="bg-orange-600 mr-auto min-w-[80px] text-white my-2 py-1 px-3"
+                     >
+                      Reject
+                  </button>
                   <button
                     type="button"
                     className="bg-red-600 min-w-[80px] text-white my-2 py-1 px-3"
-                    onClick={closeModal} >
-                    Cancelar
+                    onClick={() => closeModal()} >
+                      Cancel
                   </button>
                   <button
                     className="bg-blue-600 min-w-[80px] text-white my-2 py-1 px-3" >
-                    Enviar
+                      Send
                   </button>
                 </div>
                 {
