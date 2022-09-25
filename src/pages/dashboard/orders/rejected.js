@@ -56,7 +56,7 @@ const OrdersNoPending = () => {
             </div>
           ) : (
             <div>
-              <h3 className="text-green-800 text-xl font-bold">Cuenta de AhorrBanrural</h3>
+              <h3 className="text-green-800 text-xl font-bold">Cuenta de Ahorro Banrural</h3>
               <p className="text-lg">No. 4314151198</p>
               <p className="flex flex-wrap md:gap-2">
                 A nombre de: <span className="font-semibold">Erick Antonio Rodriguez Son</span>

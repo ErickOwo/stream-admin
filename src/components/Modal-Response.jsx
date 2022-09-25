@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { postData } from "@api/requests"
 
 import { mailer } from "@api/index";
 import QRCode from 'qrcode.react';
@@ -15,6 +14,8 @@ const ModalResponse = ({ active, closeModal, user, platforms, id, order }) => {
   const formRef = useRef(null);
   const [platformsInput, setPlatformsInput] = useState(0);
   const [message, setMessage] = useState(null)
+  const [initialDate, setInitialDate] = useState({day: null, month: null, year: null});
+  const [finalDate, setFinalDate] = useState({day: null, month: null, year: null});
 
   const [qrCode, setQRCode] = useState(null);
 
@@ -23,12 +24,36 @@ const ModalResponse = ({ active, closeModal, user, platforms, id, order }) => {
   //   setQRCode(data);
   // }
 
+  const changeInitialDate = (key, value) => {
+    initialDate[key] = value;
+    setInitialDate(initialDate);
+  }
+
+  const changeFinalDate = (key, value) => {
+    finalDate[key] = value;
+    setFinalDate(finalDate);
+  }
+
   const options = platforms.map(platform => {
     return {
       value: platform._id,
       label: platform.title
     }
   })
+
+  const returnFor = num => {
+    const array = []
+
+    for(let i = 1; i <= num; i++) {
+      array.push({value: i, label: i});
+    }
+    return array;
+  }
+
+  const optionsDay = returnFor(31); 
+  const optionsMonth = [{value: 1, label: "Enero"}, {value: 2, label: "Febrero"}, {value: 3, label: "Marzo"}, {value: 4, label: "Abril"}, {value: 5, label: "Mayo"}, {value: 6, label: "Junio"}, {value: 7, label: "Julio"}, {value: 8, label: "Agosto"}, {value: 9, label: "Septiembre"}, {value: 10, label: "Octubre"}, {value: 11, label: "Noviembre"}, {value: 12, label: "Diciembre"},];
+  const optionsYear = [{value: 2021, label: 2021}, {value: 2022, label: 2022}];
+
 
   const variantsOverlay = {
     show: {
@@ -83,8 +108,24 @@ const ModalResponse = ({ active, closeModal, user, platforms, id, order }) => {
   
   const handleSubmit = async e => {
     e.preventDefault();
+    
+    if(!platformsInput || platformsInput?.length == 0) {
+      setMessage({text: 'Add a Platform to the costumer', type: "error"})
+      return
+    }
 
-    if(!platformsInput || platformsInput?.length == 0) return alert('Fields empty');
+    if(  !initialDate.day 
+      || !initialDate.month 
+      || !initialDate.year 
+      || !finalDate.day
+      || !finalDate.month
+      || !finalDate.year ) {
+        setMessage({text: 'Add a date to initialization or finalization', type: "error"})
+        return
+      }
+
+    const startDate = new Date(`${initialDate.year}/${initialDate.month}/${initialDate.day}`);
+    const endDate = new Date(`${finalDate.year}/${finalDate.month}/${finalDate.day}`); 
     
     const platforms = platformsInput.map(platform => platform.value);
     
@@ -92,11 +133,13 @@ const ModalResponse = ({ active, closeModal, user, platforms, id, order }) => {
       platforms,
       user: user, 
       order: `${id}`,
+      startDate,
+      endDate
     }
 
     try {
       const res = await axios.put(endPoinst.orders.api, data)  
-      setMessage({text: res.data, type: 'success'})
+      setMessage({text: res.data.message, type: 'success'})
     } catch (error) {
       setMessage({type: 'error', text: 'Fallo en la API'})
     }
@@ -165,9 +208,87 @@ const ModalResponse = ({ active, closeModal, user, platforms, id, order }) => {
                     name="platforms"
                     isMulti
                     options={options}
-                    className={ `border w-full
+                    className={ ` border w-full
                     ${true ? 'border-blue-700' : 'border-green-600'}` }
                     onChange={handleChange} />
+                </div>
+                <div className="flex flex-wrap gap-10 mt-2">
+                  <div className="">
+                    <h3 className="font-semibold text-lg ">Initialization Date</h3>
+                    <div className="flex gap-3">
+                      <div className="flex flex-col gap-2">
+                        <label className="text-lg tracking-wider " htmlFor="dayStart">
+                          Day
+                        </label>
+                        <Select
+                          id="dayStart"
+                          name="dayStart"
+                          options={optionsDay}
+                          className={ `w-[80px] border  ${true ? 'border-blue-700' : 'border-green-600'}` }
+                          onChange={e=> changeInitialDate('day', e.value)} />
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <label className="text-lg tracking-wider " htmlFor="monthStart">
+                          Month
+                        </label>
+                        <Select
+                          id="monthStart"
+                          name="monthStart"
+                          options={optionsMonth}
+                          className={ `w-[170px] border  ${true ? 'border-blue-700' : 'border-green-600'}` }
+                          onChange={e=> changeInitialDate('month', e.value)} />
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <label className="text-lg tracking-wider " htmlFor="yearStart">
+                          Year
+                        </label>
+                        <Select
+                          id="yearStart"
+                          name="yearStart"
+                          options={optionsYear}
+                          className={ `w-[100px] border  ${true ? 'border-blue-700' : 'border-green-600'}` }
+                          onChange={e=> changeInitialDate('year', e.value)} />
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg ">Finalization Date</h3>
+                    <div className="flex gap-3">
+                      <div className="flex flex-col gap-2">
+                        <label className="text-lg tracking-wider " htmlFor="dayEnd">
+                          Day
+                        </label>
+                        <Select
+                          id="daEnd"
+                          name="dayEnd"
+                          options={optionsDay}
+                          className={ `w-[80px] border ${true ? 'border-blue-700' : 'border-green-600'}` }
+                          onChange={e=> changeFinalDate('day', e.value)} />
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <label className="text-lg tracking-wider " htmlFor="monthEnd">
+                          Month
+                        </label>
+                        <Select
+                          id="monthEnd"
+                          name="monthEnd"
+                          options={optionsMonth}
+                          className={ `w-[170px] border  ${true ? 'border-blue-700' : 'border-green-600'}` }
+                          onChange={e=> changeFinalDate('month', e.value)} />
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <label className="text-lg tracking-wider " htmlFor="yearEnd">
+                          Year
+                        </label>
+                        <Select
+                          id="yearEnd"
+                          name="yearEnd"
+                          options={optionsYear}
+                          className={ `w-[100px] border  ${true ? 'border-blue-700' : 'border-green-600'}` }
+                          onChange={e=> changeFinalDate('year', e.value)} />
+                      </div>
+                    </div>
+                  </div>
                 </div>
                   {
                     message ? <div className={`h-8 mt-2 ${message.type == 'success' ? 'text-green-600' : 'text-red-600'}`}> { message.text } </div> : <div className="h-8 mt-2"></div>
