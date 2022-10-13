@@ -72,7 +72,7 @@ const User = () => {
                   {platform.type == 0 ? 'Disney+' : platform.type == 1 ? 'HBO MAX' : platform.type == 2 ? 'Prime Video' : platform.type == 3 ? 'Paramount+' : platform.type == 4 ? 'Star+' : 'Neflix'}
                 </p>
               </div>
-            </div>;
+            </div>
           );
         })}
       </div>
