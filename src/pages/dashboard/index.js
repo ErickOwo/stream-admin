@@ -10,6 +10,10 @@ const Dashboard = () => {
       link: '/dashboard/orders/pending',
       name: 'Orders',
     },
+    {
+      link: '/dashboard/users',
+      name: 'Users',
+    },
   ];
   return (
     <div className="container max-w-none w-full py-8 md:px-12 px-6">

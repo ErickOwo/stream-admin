@@ -12,6 +12,9 @@ const endPoinst = {
   orders: {
     api: `${API}/admin/orders`,
   },
+  users: {
+    api: `${API}/admin/users`,
+  },
   mailer: {
     api: `${API}/admin/email/send`,
   },
