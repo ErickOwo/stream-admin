@@ -37,6 +37,7 @@ const OrdersNoPending = () => {
             <Order title="Prime Video:" quantity={order.primeProfiles} months={order.months} price={25} />
             <Order title="Paramount+:" quantity={order.paramountProfiles} months={order.months} price={25} />
             <Order title="Star+:" quantity={order.starProfiles} months={order.months} price={25} />
+            <Order title="Netflix:" quantity={order.netflixProfiles} months={order.months} price={40} />
           </div>
           {order.bank == 'Bantrab' ? (
             <div>
