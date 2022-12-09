@@ -6,6 +6,8 @@ import Link from 'next/link';
 
 const ModifyPlace = () => {
   const [platform, setPlatform] = useState(null);
+  const [customers, setCustomers] = useState(null);
+
   const router = useRouter();
   const { id } = router.query;
 
@@ -13,8 +15,9 @@ const ModifyPlace = () => {
     const setItem = async () => {
       const item = await getObject(`${endPoinst.platforms.api}/${id}`);
       setPlatform(item.platform);
+      setCustomers(item.customers);
     };
-    setItem();
+    setItem(platform);
   }, []);
 
   return (
@@ -34,6 +37,16 @@ const ModifyPlace = () => {
             <span className="font-semibold">Password: </span>
             {platform?.password}
           </p>
+        </div>
+        <div className="flex flex-col gap-2 text-white">
+          <div className="text-xl font-semibold">Customers:</div>
+          {customers?.map((customer, index) => (
+            <div className="flex flex-col bg-blue-900 p-2" key={index}>
+              <div>{customer.name}</div>
+              <div>{customer.email}</div>
+              <div>{customer.phone}</div>
+            </div>
+          ))}
         </div>
         <div className="options h-10 mt-6">
           <Link href="/dashboard/platforms">
