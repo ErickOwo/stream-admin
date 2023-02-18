@@ -100,7 +100,11 @@ const Form = ({ formData, formNewMovie = true, }) => {
           },
           {
             value: 4,
-            label: 'Star+' 
+            label: 'Star+',
+          },
+          {
+            value: 100,
+            label: 'Netflix',
           }
         ]}
         onChange={handleChange} />

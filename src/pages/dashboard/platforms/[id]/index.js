@@ -3,10 +3,14 @@ import { useRouter } from 'next/router';
 import { getObject, deleteObject } from '@api/requests';
 import endPoinst from '@api/index';
 import Link from 'next/link';
+import ModalCustomer from '@components/Modal-Customer';
 
 const ModifyPlace = () => {
   const [platform, setPlatform] = useState(null);
   const [customers, setCustomers] = useState(null);
+
+  const [modal, setModal] = useState(false);
+  const [modalVariable, setModalVariable] = useState(false);
 
   const router = useRouter();
   const { id } = router.query;
@@ -19,6 +23,17 @@ const ModifyPlace = () => {
     };
     setItem(platform);
   }, []);
+
+  const closeModal = () => {
+    setModalVariable(false);
+    setTimeout(() => {
+      setModal(false);
+    }, 500);
+  };
+  const openModal = () => {
+    setModalVariable(true);
+    setModal(true);
+  };
 
   return (
     <div className="container flex justify-center max-w-none md:p-6 p-2">
@@ -41,12 +56,25 @@ const ModifyPlace = () => {
         <div className="flex flex-col gap-2 text-white">
           <div className="text-xl font-semibold">Customers:</div>
           {customers?.map((customer, index) => (
-            <div className="flex flex-col bg-blue-900 p-2" key={index}>
-              <div>{customer.name}</div>
-              <div>{customer.email}</div>
-              <div>{customer.phone}</div>
+            <div className="flex flex-wrap bg-blue-900 p-2 border border-black">
+              <div className="mr-auto">
+                <div className="flex flex-col " key={index}>
+                  <div>{customer.name}</div>
+                  <div>{customer.email}</div>
+                  <div>{customer.phone}</div>
+                </div>
+              </div>
+              <div className="flex gap-2 items-center">
+                <button className="bg-white text-black p-2 w-[70px]">Edit</button>
+                <button className="bg-white text-black p-2 w-[70px]">Remove</button>
+              </div>
             </div>
           ))}
+          <div className="p-2 bg-black  text-white">
+            <button className="bg-slate-500 p-2" onClick={() => openModal()}>
+              Add Customer
+            </button>
+          </div>
         </div>
         <div className="options h-10 mt-6">
           <Link href="/dashboard/platforms">
@@ -65,6 +93,7 @@ const ModifyPlace = () => {
           </button>
         </div>
       </div>
+      {modalVariable ? <ModalCustomer modal={modal} /> : null}
     </div>
   );
 };

@@ -60,6 +60,7 @@ const OrdersPending = () => {
               <Order title="Prime Video:" quantity={order.primeProfiles} months={order.months} price={25} />
               <Order title="Paramount+:" quantity={order.paramountProfiles} months={order.months} price={25} />
               <Order title="Star+:" quantity={order.starProfiles} months={order.months} price={25} />
+              <Order title="Spotify:" quantity={order.spotifyProfiles} months={order.months} price={30} />
               <Order title="Netflix:" quantity={order.netflixProfiles} months={order.months} price={40} />
             </div>
             {order.bank == 'Bantrab' ? (
@@ -78,9 +79,17 @@ const OrdersPending = () => {
                   A nombre de: <span className="font-semibold">Erick Antonio Rodriguez Son</span>
                 </p>
               </div>
+            ) : order.bank == 'BAC' ? (
+              <div>
+                <h3 className="text-red-800 text-xl font-bold">Cuenta de Ahorro BAC</h3>
+                <p className="text-lg">No. 969894401</p>
+                <p className="flex flex-wrap md:gap-2">
+                  A nombre de: <span className="font-semibold">Erick Antonio Rodriguez Son</span>
+                </p>
+              </div>
             ) : (
               <div>
-                <h3 className="text-green-800 text-xl font-bold">Cuenta de AhorrBanrural</h3>
+                <h3 className="text-green-800 text-xl font-bold">Cuenta de Ahorro Banrural</h3>
                 <p className="text-lg">No. 4314151198</p>
                 <p className="flex flex-wrap md:gap-2">
                   A nombre de: <span className="font-semibold">Erick Antonio Rodriguez Son</span>
