@@ -1,8 +1,15 @@
-import React from 'react'
+import { useRef } from 'react'
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/router';
+
+import { addObject } from '@api/requests'
+import endPoinst from '@api/index';
 
 const ModalCustomer = ({modal}) => {
-  
+  const formRef = useRef(null);
+  const router = useRouter();
+  const { id } = router.query;
+
   const variantsOverlay = {
     show: {
       opacity: 1,
@@ -36,6 +43,24 @@ const ModalCustomer = ({modal}) => {
     },
   };
 
+  const handleSubmit = e => {
+    e.preventDefault()
+    const formData = new FormData(formRef.current)
+    
+    const data = {
+      name: formData.get('name'),
+      email: formData.get('email'),
+      phone: formData.get('phone')
+    }
+    
+    addObject(endPoinst.platforms.customer + '/' + id, data).then(res => {
+      console.log(res)
+    }).catch(e => {
+      console.log(e)
+    })
+    
+  }
+
   return (
     <motion.div 
             className='fixed top-0 left-0 w-full min-h-screen bg-black/20 flex overflow-auto justify-center items-center '
@@ -43,6 +68,8 @@ const ModalCustomer = ({modal}) => {
             variants={variantsOverlay}
             animate={modal ? 'show' : 'hidde'}  >
             <motion.form 
+              ref={formRef}
+              onSubmit={handleSubmit}
               className='p-4 bg-white flex flex-col gap-2'
               initial={{ scale: 0.7 }}
               variants={variantsModal}
@@ -71,6 +98,11 @@ const ModalCustomer = ({modal}) => {
                   name='phone' 
                   id='phone' ></input>
               </div>
+              <button 
+                type='submit'
+                className='bg-stone-500 text-white' >
+                Add
+              </button>
             </motion.form>
           </motion.div>
   )

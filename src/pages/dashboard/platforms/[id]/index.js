@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { getObject, deleteObject } from '@api/requests';
+import { getObject, putObject } from '@api/requests';
 import endPoinst from '@api/index';
 import Link from 'next/link';
 import ModalCustomer from '@components/Modal-Customer';
@@ -35,6 +35,13 @@ const ModifyPlace = () => {
     setModal(true);
   };
 
+  const handleRemove = (customer) => {
+    if (confirm('Are you sure to remove the customer from this platform?'))
+      putObject(endPoinst.platforms.customer + '/' + id, { id: `${customer}` }).then((res) => {
+        alert(res);
+      });
+  };
+
   return (
     <div className="container flex justify-center max-w-none md:p-6 p-2">
       <div className="w-full max-w-[800px] md:px-10 px-4 pt-9 pb-14 bg-sky-900 flex flex-col justify-center ">
@@ -56,17 +63,19 @@ const ModifyPlace = () => {
         <div className="flex flex-col gap-2 text-white">
           <div className="text-xl font-semibold">Customers:</div>
           {customers?.map((customer, index) => (
-            <div className="flex flex-wrap bg-blue-900 p-2 border border-black">
+            <div className="flex flex-wrap bg-blue-900 p-2 border border-black" key={index}>
               <div className="mr-auto">
                 <div className="flex flex-col " key={index}>
-                  <div>{customer.name}</div>
-                  <div>{customer.email}</div>
-                  <div>{customer.phone}</div>
+                  <div>{customer?.name}</div>
+                  <div>{customer?.email}</div>
+                  <div>{customer?.phone}</div>
                 </div>
               </div>
               <div className="flex gap-2 items-center">
                 <button className="bg-white text-black p-2 w-[70px]">Edit</button>
-                <button className="bg-white text-black p-2 w-[70px]">Remove</button>
+                <button className="bg-white text-black p-2 w-[70px]" onClick={() => handleRemove(customer._id)}>
+                  Remove
+                </button>
               </div>
             </div>
           ))}
@@ -85,7 +94,7 @@ const ModifyPlace = () => {
           </Link>
           <button
             onClick={() => {
-              if (confirm('Está seguro que desea eliminar la plataforma')) deleteObject(`${endPoinst.platforms.api}/${id}`).then((res) => router.push('/dashboard/platforms'));
+              if (confirm('Está seguro que desea eliminar la plataforma')) putObject(`${endPoinst.platforms.api}/${id}`).then((res) => router.push('/dashboard/platforms'));
             }}
             className="mt-4 mr-3 rounded-md text-md py-2 px-3 bg-sky-100 text-gray-800 text white"
           >

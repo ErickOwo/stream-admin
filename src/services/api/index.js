@@ -8,6 +8,7 @@ const endPoinst = {
   },
   platforms: {
     api: `${API}/admin/platforms`,
+    customer: `${API}/admin/platforms/customer`,
   },
   orders: {
     api: `${API}/admin/orders`,
