@@ -34,7 +34,7 @@ const ModalResponse = ({ active, closeModal, user, platforms, id, order }) => {
     setFinalDate(finalDate);
   }
 
-  const options = platforms.map(platform => {
+  const options = platforms?.map(platform => {
     return {
       value: platform._id,
       label: platform.title

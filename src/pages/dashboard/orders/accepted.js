@@ -2,11 +2,19 @@ import useSWR from 'swr';
 import endPoinst from '@api/index';
 import { getData } from '@api/requests';
 import Image from 'next/image';
+import axios from 'axios';
 
 import Order from '@components/Order';
 
 const OrdersNoPending = () => {
-  const { data } = useSWR(endPoinst.orders.api + '/nopending', getData);
+  const { data } = useSWR(endPoinst.orders.api + '/accepted', getData);
+
+  const handleDelete = async (id) => {
+    if (!confirm('Do you want to DELETE the order?')) return;
+    const { data } = await axios.delete(`${endPoinst.orders.api}/${id}`);
+
+    alert(data);
+  };
 
   return (
     <div className="min-h-screen w-full p-4 flex flex-col items-center gap-4">
@@ -49,7 +57,7 @@ const OrdersNoPending = () => {
             </div>
           ) : (
             <div>
-              <h3 className="text-green-800 text-xl font-bold">Cuenta de AhorrBanrural</h3>
+              <h3 className="text-green-800 text-xl font-bold">Cuenta de Ahorro Banrural</h3>
               <p className="text-lg">No. 4314151198</p>
               <p className="flex flex-wrap md:gap-2">
                 A nombre de: <span className="font-semibold">Erick Antonio Rodriguez Son</span>

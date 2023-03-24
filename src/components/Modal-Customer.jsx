@@ -1,14 +1,15 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 
 import { addObject } from '@api/requests'
 import endPoinst from '@api/index';
 
-const ModalCustomer = ({modal}) => {
+const ModalCustomer = ({modal, closeModal}) => {
   const formRef = useRef(null);
   const router = useRouter();
   const { id } = router.query;
+  const [message, setMessage] = useState(null);
 
   const variantsOverlay = {
     show: {
@@ -54,9 +55,12 @@ const ModalCustomer = ({modal}) => {
     }
     
     addObject(endPoinst.platforms.customer + '/' + id, data).then(res => {
-      console.log(res)
+      setMessage({text: res, type: 'success'})
+      setTimeout(()=>{
+        closeModal()
+      }, 1300)
     }).catch(e => {
-      console.log(e)
+      setMessage({text: 'Error en la API', type: 'error'})
     })
     
   }
@@ -98,10 +102,22 @@ const ModalCustomer = ({modal}) => {
                   name='phone' 
                   id='phone' ></input>
               </div>
+              {
+                message ? <div className={`h-[25px] ${message.type == 'error' ? 'text-red-600' : 'text-green-600'}`}>
+                  {
+                    message.text
+                  }
+                </div> : <div className='h-[25px]'></div>
+              }
               <button 
                 type='submit'
                 className='bg-stone-500 text-white' >
                 Add
+              </button>
+              <button 
+                className='bg-black text-white'
+                onClick={()=> closeModal()} >
+                Close
               </button>
             </motion.form>
           </motion.div>

@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import useSWR from 'swr';
-import endPoinst from '@api/index';
+import endPoinst, { platforms } from '@api/index';
 import { getData } from '@api/requests';
 import Image from 'next/image';
 
@@ -10,12 +10,28 @@ import axios from 'axios';
 
 const OrdersPending = () => {
   const { data } = useSWR(endPoinst.orders.api + '/pending', getData);
-  const { data: platforms } = useSWR(endPoinst.platforms.api + '/asign', getData);
+  const [platforms, setPlatforms] = useState(null);
   const [screenPanel, setScreenPanel] = useState(false);
   const [panelAnimation, setPanelAnimation] = useState(false);
   const [userPanel, setUserPanel] = useState(null);
   const [orderPanel, setOrderPanel] = useState(null);
   const [orderIdPanel, setOrderIdPanel] = useState(null);
+
+  useEffect(() => {
+    const getPlatforms = async () => {
+      const platformsDB = await getData(`${endPoinst.platforms.api}/asign`);
+      const platformsNotFilled = platformsDB.filter((platform) => {
+        if (
+          ((platform.type == 0 || platform.type == 4) && platform.customers.length < 7) ||
+          ((platform.type == 2 || platform.type == 3) && platform.customers.length < 6) ||
+          ((platform.type != 0 || platform.type != 2 || platform.type != 3 || platform.type != 4) && platform.customers.length < 5)
+        )
+          return platform;
+      });
+      setPlatforms(platformsNotFilled);
+    };
+    getPlatforms();
+  }, []);
 
   const responseModal = async (user, id, order) => {
     try {

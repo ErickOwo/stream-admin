@@ -136,6 +136,18 @@ const User = () => {
                     {order.pending ? 'Pending' : order.accepted ? 'Accepted' : 'Rejected'}
                   </p>
                 </div>
+                {order.startDate ? (
+                  <div className="flex flex-wrap">
+                    <h3 className="font-semibold mx-2">Start Date:</h3>
+                    {order.startDate.substring(0, 10)}
+                  </div>
+                ) : null}
+                {order.endDate ? (
+                  <div className="flex flex-wrap">
+                    <h3 className="font-semibold mx-2">End Date:</h3>
+                    {order.endDate.substring(0, 10)}
+                  </div>
+                ) : null}
                 <div className="flex flex-col">
                   <h4 className="text-xl font-semibold">Pago:</h4>
                   <div className="flex justify-center h-[420px] w-full">
