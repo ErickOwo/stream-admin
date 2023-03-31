@@ -69,8 +69,8 @@ const OrdersAccepted = () => {
 
         setTimeout(() => {
           setMessage(null);
-          //setImageAdded(false)
-          //setModal(false)
+          setImageAdded(false)
+          setModal(false)
         }, 1000);
       })
       .catch((e) => {
