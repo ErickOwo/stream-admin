@@ -7,6 +7,12 @@ const options = {
   },
 };
 
+const optionsMultiedia = {
+  headers: {
+    'Content-Type': 'multipart/form-data',
+  },
+};
+
 const getData = async (url) => {
   const response = await axios(url);
   return response.data;
@@ -31,6 +37,10 @@ const deleteObject = async (url) => {
   const response = await axios.delete(url);
   return response.data;
 };
+const patchMultimedia = async (url, body) => {
+  const response = await axios.patch(url, body, optionsMultiedia);
+  return response.data;
+};
 
 module.exports = {
   getData,
@@ -38,4 +48,5 @@ module.exports = {
   putObject,
   getObject,
   deleteObject,
+  patchMultimedia,
 };

@@ -259,7 +259,7 @@ const ModalResponse = ({ active, closeModal, user, platforms, id, order }) => {
                           Day
                         </label>
                         <Select
-                          id="daEnd"
+                          id="dayEnd"
                           name="dayEnd"
                           options={optionsDay}
                           className={ `w-[80px] border ${true ? 'border-blue-700' : 'border-green-600'}` }

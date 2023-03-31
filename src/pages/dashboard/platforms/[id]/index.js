@@ -79,7 +79,7 @@ const ModifyPlace = () => {
               </div>
             </div>
           ))}
-          {((platform?.type == 0 || platform?.type) == 4 && platform?.customers.length < 7) ||
+          {((platform?.type == 0 || platform?.type == 4) && platform?.customers.length < 7) ||
           ((platform?.type == 2 || platform?.type == 3) && platform?.customers.length < 6) ||
           ((platform?.type != 2 || platform?.type != 3 || platform?.type != 0 || platform?.type != 4) && platform?.customers.length < 5) ? (
             <div className="p-2 bg-black  text-white">
