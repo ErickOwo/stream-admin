@@ -41,6 +41,10 @@ const patchMultimedia = async (url, body) => {
   const response = await axios.patch(url, body, optionsMultiedia);
   return response.data;
 };
+const postMultimedia = async (url, body) => {
+  const response = await axios.post(url, body, optionsMultiedia);
+  return response.data;
+};
 
 module.exports = {
   getData,
@@ -49,4 +53,5 @@ module.exports = {
   getObject,
   deleteObject,
   patchMultimedia,
+  postMultimedia,
 };

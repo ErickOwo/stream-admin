@@ -14,8 +14,6 @@ const ModalResponse = ({ active, closeModal, user, platforms, id, order }) => {
   const formRef = useRef(null);
   const [platformsInput, setPlatformsInput] = useState(0);
   const [message, setMessage] = useState(null)
-  const [initialDate, setInitialDate] = useState({day: null, month: null, year: null});
-  const [finalDate, setFinalDate] = useState({day: null, month: null, year: null});
 
   const [qrCode, setQRCode] = useState(null);
 
@@ -24,15 +22,6 @@ const ModalResponse = ({ active, closeModal, user, platforms, id, order }) => {
   //   setQRCode(data);
   // }
 
-  const changeInitialDate = (key, value) => {
-    initialDate[key] = value;
-    setInitialDate(initialDate);
-  }
-
-  const changeFinalDate = (key, value) => {
-    finalDate[key] = value;
-    setFinalDate(finalDate);
-  }
 
   const options = platforms?.map(platform => {
     return {
@@ -40,19 +29,6 @@ const ModalResponse = ({ active, closeModal, user, platforms, id, order }) => {
       label: platform.title
     }
   })
-
-  const returnFor = num => {
-    const array = []
-
-    for(let i = 1; i <= num; i++) {
-      array.push({value: i, label: i});
-    }
-    return array;
-  }
-
-  const optionsDay = returnFor(31); 
-  const optionsMonth = [{value: 1, label: "Enero"}, {value: 2, label: "Febrero"}, {value: 3, label: "Marzo"}, {value: 4, label: "Abril"}, {value: 5, label: "Mayo"}, {value: 6, label: "Junio"}, {value: 7, label: "Julio"}, {value: 8, label: "Agosto"}, {value: 9, label: "Septiembre"}, {value: 10, label: "Octubre"}, {value: 11, label: "Noviembre"}, {value: 12, label: "Diciembre"},];
-  const optionsYear = [{value: 2022, label: 2022}, {value: 2023, label: 2023}];
 
 
   const variantsOverlay = {
@@ -108,33 +84,21 @@ const ModalResponse = ({ active, closeModal, user, platforms, id, order }) => {
   
   const handleSubmit = async e => {
     e.preventDefault();
+    const formData = new FormData(formRef.current);
     
     if(!platformsInput || platformsInput?.length == 0) {
       setMessage({text: 'Add a Platform to the costumer', type: "error"})
       return
     }
 
-    if(  !initialDate.day 
-      || !initialDate.month 
-      || !initialDate.year 
-      || !finalDate.day
-      || !finalDate.month
-      || !finalDate.year ) {
-        setMessage({text: 'Add a date to initialization or finalization', type: "error"})
-        return
-      }
-
-    const startDate = new Date(`${initialDate.year}/${initialDate.month}/${initialDate.day}`);
-    const endDate = new Date(`${finalDate.year}/${finalDate.month}/${finalDate.day}`); 
-    
     const platforms = platformsInput.map(platform => platform.value);
     
     const data = {
       platforms,
       user: user, 
       order: `${id}`,
-      startDate,
-      endDate
+      startDate: formData.get('startDate'),
+      endDate: formData.get('endDate')
     }
 
     try {
@@ -212,82 +176,22 @@ const ModalResponse = ({ active, closeModal, user, platforms, id, order }) => {
                     ${true ? 'border-blue-700' : 'border-green-600'}` }
                     onChange={handleChange} />
                 </div>
-                <div className="flex flex-wrap gap-10 mt-2">
-                  <div className="">
-                    <h3 className="font-semibold text-lg ">Initialization Date</h3>
-                    <div className="flex gap-3">
-                      <div className="flex flex-col gap-2">
-                        <label className="text-lg tracking-wider " htmlFor="dayStart">
-                          Day
-                        </label>
-                        <Select
-                          id="dayStart"
-                          name="dayStart"
-                          options={optionsDay}
-                          className={ `w-[80px] border  ${true ? 'border-blue-700' : 'border-green-600'}` }
-                          onChange={e=> changeInitialDate('day', e.value)} />
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        <label className="text-lg tracking-wider " htmlFor="monthStart">
-                          Month
-                        </label>
-                        <Select
-                          id="monthStart"
-                          name="monthStart"
-                          options={optionsMonth}
-                          className={ `w-[170px] border  ${true ? 'border-blue-700' : 'border-green-600'}` }
-                          onChange={e=> changeInitialDate('month', e.value)} />
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        <label className="text-lg tracking-wider " htmlFor="yearStart">
-                          Year
-                        </label>
-                        <Select
-                          id="yearStart"
-                          name="yearStart"
-                          options={optionsYear}
-                          className={ `w-[100px] border  ${true ? 'border-blue-700' : 'border-green-600'}` }
-                          onChange={e=> changeInitialDate('year', e.value)} />
-                      </div>
-                    </div>
+                <div className="flex flex-col mt-2">
+                  <div className="flex gap-2">
+                    <label 
+                      className="font-semibold text-lg "
+                      htmlFor="startDate" >
+                        Initialization Date:
+                    </label>
+                    <input type='date' id="startDate" name="startDate"></input>    
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-lg ">Finalization Date</h3>
-                    <div className="flex gap-3">
-                      <div className="flex flex-col gap-2">
-                        <label className="text-lg tracking-wider " htmlFor="dayEnd">
-                          Day
-                        </label>
-                        <Select
-                          id="dayEnd"
-                          name="dayEnd"
-                          options={optionsDay}
-                          className={ `w-[80px] border ${true ? 'border-blue-700' : 'border-green-600'}` }
-                          onChange={e=> changeFinalDate('day', e.value)} />
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        <label className="text-lg tracking-wider " htmlFor="monthEnd">
-                          Month
-                        </label>
-                        <Select
-                          id="monthEnd"
-                          name="monthEnd"
-                          options={optionsMonth}
-                          className={ `w-[170px] border  ${true ? 'border-blue-700' : 'border-green-600'}` }
-                          onChange={e=> changeFinalDate('month', e.value)} />
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        <label className="text-lg tracking-wider " htmlFor="yearEnd">
-                          Year
-                        </label>
-                        <Select
-                          id="yearEnd"
-                          name="yearEnd"
-                          options={optionsYear}
-                          className={ `w-[100px] border  ${true ? 'border-blue-700' : 'border-green-600'}` }
-                          onChange={e=> changeFinalDate('year', e.value)} />
-                      </div>
-                    </div>
+                  <div className="flex gap-2">
+                    <label 
+                      className="font-semibold text-lg "
+                      htmlFor="endDate"  >
+                        Finalization Date:
+                    </label>
+                    <input type='date' id="endDate" name="endDate"></input> 
                   </div>
                 </div>
                   {

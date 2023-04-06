@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 
 import Order from '@components/Order';
 import Link from 'next/link';
+import AddOrderModal from '@components/Add-Order-Modal';
 
 const OrdersAccepted = () => {
   const [data, setData] = useState(null);
@@ -15,6 +16,9 @@ const OrdersAccepted = () => {
   const [modalAnimation, setModalAnimation] = useState(false);
   const [message, setMessage] = useState(null);
   const [imgAdded, setImageAdded] = useState(false);
+  const [modalAdd, setModalAdd] = useState(false);
+  const [modalAnimationAdd, setModalAnimationAdd] = useState(false);
+  const [platforms, setPlatforms] = useState(null);
 
   const formRef = useRef(null);
 
@@ -33,7 +37,25 @@ const OrdersAccepted = () => {
         const { data } = await axios(`${endPoints.orders.api}/user/${order.userCustomer}`);
         orders.push({ user: data.user, ...order });
       }
+      const getPlatforms = async () => {
+        const platformsDB = await getData(`${endPoints.platforms.api}/asign`);
+        const platformsNotFilled = platformsDB.filter((platform) => {
+          if (
+            ((platform.type == 0 || platform.type == 4) && platform.customers.length < 7) ||
+            ((platform.type == 2 || platform.type == 3) && platform.customers.length < 6) ||
+            ((platform.type != 0 || platform.type != 2 || platform.type != 3 || platform.type != 4) && platform.customers.length < 5)
+          )
+            return platform;
+        });
+        setPlatforms(platformsNotFilled);
+      };
+      orders.sort((a, b) => {
+        const dateA = new Date(a.endDate);
+        const dateB = new Date(b.endDate);
+        return dateA.getTime() - dateB.getTime();
+      });
       setData(orders);
+      getPlatforms();
     };
     ejecuteFunction();
   }, []);
@@ -53,10 +75,6 @@ const OrdersAccepted = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(formRef.current);
-    const data = {
-      startDate: new Date(formData.get('startDate')),
-      endDate: new Date(formData.get('endDate')),
-    };
 
     if (formData.get('media').size == 0) {
       setMessage({ type: 'error', text: 'Please add the image of pay before press change data' });
@@ -69,8 +87,8 @@ const OrdersAccepted = () => {
 
         setTimeout(() => {
           setMessage(null);
-          setImageAdded(false)
-          setModal(false)
+          setImageAdded(false);
+          setModal(false);
         }, 1000);
       })
       .catch((e) => {
@@ -115,6 +133,17 @@ const OrdersAccepted = () => {
 
   return (
     <div className="min-h-screen w-fullflex flex-col">
+      <AddOrderModal
+        active={modalAdd}
+        modalAnimation={modalAnimationAdd}
+        message={message}
+        setMessage={setMessage}
+        platforms={platforms}
+        setModal={setModalAdd}
+        setAnimation={setModalAnimationAdd}
+        imgAdded={imgAdded}
+        setImageAdded={setImageAdded}
+      />
       {modal ? (
         <motion.div
           className="fixed top-0 right-0 min-h-screen w-full bg-black/40 z-50 flex justify-center items-center"
@@ -186,7 +215,15 @@ const OrdersAccepted = () => {
         <Link href="/dashboard">
           <button className="mr-auto bg-white py-1 px-3 rounded-md">Volver</button>
         </Link>
-        <button className="bg-white py-1 px-3 rounded-md">Add Order</button>
+        <button
+          className="bg-white py-1 px-3 rounded-md"
+          onClick={() => {
+            setModalAdd(true);
+            setModalAnimationAdd(true);
+          }}
+        >
+          Add Order
+        </button>
       </div>
       <div className="flex flex-col items-center gap-4 p-4">
         {data ? (

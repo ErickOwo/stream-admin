@@ -1,6 +1,6 @@
 const API = process.env.NEXT_PUBLIC_API_URL;
 
-const endPoinst = {
+const endPoints = {
   auth: {
     login: `${API}/login`,
     signUp: `${API}/auth/signup`,
@@ -21,4 +21,4 @@ const endPoinst = {
   },
 };
 
-module.exports = endPoinst;
+module.exports = endPoints;
