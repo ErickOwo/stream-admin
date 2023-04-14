@@ -8,7 +8,7 @@ const endPoints = {
   },
   platforms: {
     api: `${API}/admin/platforms`,
-    customer: `${API}/admin/platforms/customer`,
+    profiles: `${API}/admin/profiles`,
   },
   orders: {
     api: `${API}/admin/orders`,

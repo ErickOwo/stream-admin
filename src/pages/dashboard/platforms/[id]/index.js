@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { getObject, putObject } from '@api/requests';
+import { getObject, putObject, deleteObject } from '@api/requests';
 import endPoinst from '@api/index';
 import Link from 'next/link';
 import ModalCustomer from '@components/Modal-Customer';
@@ -35,9 +35,9 @@ const ModifyPlace = () => {
     setModal(true);
   };
 
-  const handleRemove = (customer) => {
+  const handleRemove = (id) => {
     if (confirm('Are you sure to remove the customer from this platform?'))
-      putObject(endPoinst.platforms.customer + '/' + id, { id: `${customer}` }).then((res) => {
+      deleteObject(endPoinst.platforms.profiles + '/' + id).then((res) => {
         alert(res);
       });
   };
@@ -66,14 +66,14 @@ const ModifyPlace = () => {
             <div className="flex flex-wrap bg-blue-900 p-2 border border-black" key={index}>
               <div className="mr-auto">
                 <div className="flex flex-col " key={index}>
-                  <div>{customer?.name}</div>
-                  <div>{customer?.email}</div>
-                  <div>{customer?.phone}</div>
+                  <div>{customer?.customerId?.name}</div>
+                  <div>{customer?.customerId?.email}</div>
+                  <div>{customer?.customerId?.phone}</div>
                 </div>
               </div>
               <div className="flex gap-2 items-center">
                 <button className="bg-white text-black p-2 w-[70px]">Edit</button>
-                <button className="bg-white text-black p-2 w-[70px]" onClick={() => handleRemove(customer._id)}>
+                <button className="bg-white text-black p-2 w-[70px]" onClick={() => handleRemove(customer?._id)}>
                   Remove
                 </button>
               </div>

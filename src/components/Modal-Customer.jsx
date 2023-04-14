@@ -54,7 +54,7 @@ const ModalCustomer = ({modal, closeModal}) => {
       phone: formData.get('phone')
     }
     
-    addObject(endPoinst.platforms.customer + '/' + id, data).then(res => {
+    addObject(endPoinst.platforms.profiles + '/' + id, data).then(res => {
       setMessage({text: res, type: 'success'})
       setTimeout(()=>{
         closeModal()

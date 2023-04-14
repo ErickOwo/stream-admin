@@ -21,14 +21,9 @@ const User = () => {
   const getData = async (user) => {
     const userData = await axios(`${endPoinst.users.api}/user/${user}`);
     const orders = await axios(`${endPoinst.users.api}/orders/${user}`);
-    const platformsContainer = [];
+    const platformsContainer = await axios(`${endPoinst.users.api}/profiles/${user}`);
 
-    for (let i = 0; i < userData.data.platforms.length; i++) {
-      const data = await axios(`${endPoinst.users.api}/platforms/${userData.data.platforms[i]}`);
-      await platformsContainer.push(data.data);
-    }
-
-    setPlatforms(platformsContainer);
+    setPlatforms(platformsContainer.data);
     setUser(userData.data);
     setOrders(orders.data);
   };
@@ -56,20 +51,30 @@ const User = () => {
             <div className="p-3 max-w-lg border-l border-b mb-3 border-gray-600 text-md" key={index}>
               <div className="flex">
                 <h4 className="font-bold mr-2">Title: </h4>
-                <p>{platform.title}</p>
+                <p>{platform.platformId.title}</p>
               </div>
               <div className="flex">
                 <h4 className="font-bold mr-2">Email: </h4>
-                <p>{platform.email}</p>
+                <p>{platform.platformId.email}</p>
               </div>
               <div className="flex">
                 <h4 className="font-bold mr-2">Password: </h4>
-                <p>{platform.password}</p>
+                <p>{platform.platformId.password}</p>
               </div>
               <div className="flex">
                 <h4 className="font-bold mr-2">Type: </h4>
                 <p>
-                  {platform.type == 0 ? 'Disney+' : platform.type == 1 ? 'HBO MAX' : platform.type == 2 ? 'Prime Video' : platform.type == 3 ? 'Paramount+' : platform.type == 4 ? 'Star+' : 'Neflix'}
+                  {platform.platformId.type == 0
+                    ? 'Disney+'
+                    : platform.platformId.type == 1
+                    ? 'HBO MAX'
+                    : platform.platformId.type == 2
+                    ? 'Prime Video'
+                    : platform.platformId.type == 3
+                    ? 'Paramount+'
+                    : platform.platformId.type == 4
+                    ? 'Star+'
+                    : 'Neflix'}
                 </p>
               </div>
             </div>
