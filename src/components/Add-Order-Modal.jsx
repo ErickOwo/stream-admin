@@ -90,6 +90,7 @@ const AddOrderModal = ({active, modalAnimation, message, platforms, setMessage, 
     postMultimedia(endPoints.orders.api + `/create`, formData)
     .then((res) => {
         setMessage(res);
+        if(res.type != 'success') return
         setTimeout(() => {
           setMessage(null);
           setImageAdded(false)
@@ -152,7 +153,7 @@ const AddOrderModal = ({active, modalAnimation, message, platforms, setMessage, 
               </div>
               <div className="flex gap-2">
                 <label className="font-semibold w-[85px]">Email:</label>
-                <input className='border border-black' required name='email' id='email'></input>
+                <input className='border border-black' name='email' id='email'></input>
               </div>
               <div className="flex gap-2">
                 <label className="font-semibold w-[85px]">Phone:</label>

@@ -41,9 +41,9 @@ const OrdersAccepted = () => {
         const platformsDB = await getData(`${endPoints.platforms.api}/asign`);
         const platformsNotFilled = platformsDB.filter((platform) => {
           if (
-            ((platform.type == 0 || platform.type == 4) && platform.customers.length < 7) ||
-            ((platform.type == 2 || platform.type == 3) && platform.customers.length < 6) ||
-            ((platform.type != 0 || platform.type != 2 || platform.type != 3 || platform.type != 4) && platform.customers.length < 5)
+            ((platform.type == 0 || platform.type == 4) && platform.profiles.length < 7) ||
+            ((platform.type == 2 || platform.type == 3) && platform.profiles.length < 6) ||
+            ((platform.type != 0 || platform.type != 2 || platform.type != 3 || platform.type != 4) && platform.profiles.length < 5)
           )
             return platform;
         });
