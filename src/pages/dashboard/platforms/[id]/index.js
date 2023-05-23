@@ -79,10 +79,11 @@ const ModifyPlace = () => {
               </div>
             </div>
           ))}
-          {((platform?.type == 0 || platform?.type == 4) && platform?.profiles.length < 7) ||
-          ((platform?.type == 2 || platform?.type == 3) && platform?.profiles.length < 6) ||
-          ((platform?.type != 2 || platform?.type != 3 || platform?.type != 0 || platform?.type != 4) && platform?.profiles.length < 5) ? (
+          {((platform?.type == 0 || platform?.type == 4) && customers?.length < 7) ||
+          ((platform?.type == 2 || platform?.type == 3) && customers?.length < 6) ||
+          ((platform?.type != 2 || platform?.type != 3 || platform?.type != 0 || platform?.type != 4) && customers?.length < 5) ? (
             <div className="p-2 bg-black  text-white">
+              
               <button className="bg-slate-500 p-2" onClick={() => openModal()}>
                 Add Customer
               </button>
