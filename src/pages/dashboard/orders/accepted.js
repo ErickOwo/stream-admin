@@ -32,11 +32,7 @@ const OrdersAccepted = () => {
   useEffect(() => {
     const ejecuteFunction = async () => {
       const data = await getData(endPoints.orders.api + '/accepted');
-      const orders = [];
-      for (let order of data) {
-        const { data } = await axios(`${endPoints.orders.api}/user/${order.userCustomer}`);
-        orders.push({ user: data.user, ...order });
-      }
+
       const getPlatforms = async () => {
         const platformsDB = await getData(`${endPoints.platforms.api}/asign`);
         const platformsNotFilled = platformsDB.filter((platform) => {
@@ -49,12 +45,12 @@ const OrdersAccepted = () => {
         });
         setPlatforms(platformsNotFilled);
       };
-      orders.sort((a, b) => {
+      data.sort((a, b) => {
         const dateA = new Date(a.endDate);
         const dateB = new Date(b.endDate);
         return dateA.getTime() - dateB.getTime();
       });
-      setData(orders);
+      setData(data);
       getPlatforms();
     };
     ejecuteFunction();
@@ -237,15 +233,15 @@ const OrdersAccepted = () => {
                   </div>
                   <div className="flex gap-2">
                     <p className="font-semibold">Name:</p>
-                    <p>{order.user.name}</p>
+                    <p>{order.userCustomer.name}</p>
                   </div>
                   <div className="flex gap-2">
                     <p className="font-semibold">Email:</p>
-                    <p>{order.user.email}</p>
+                    <p>{order.userCustomer.email}</p>
                   </div>
                   <div className="flex gap-2">
                     <p className="font-semibold">Phone:</p>
-                    <p>{order.user.phone}</p>
+                    <p>{order.userCustomer.phone}</p>
                   </div>
                 </div>
                 <div className="grid gap-2 grid-cols-4 md:grid-cols-7 items-end">
