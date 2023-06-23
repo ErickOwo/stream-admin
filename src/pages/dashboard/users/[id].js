@@ -88,7 +88,7 @@ const User = () => {
             <div key={index} className="">
               <div className="flex flex-col bg-[#dfdfdf]">
                 <h4 className="mr-2 font-semibold">No.</h4>
-                <p>{order._id}</p>
+                <p>{order.orderNumber}</p>
                 <div className="grid grid-cols-7">
                   <h3 className="font-semibold">Cuentas</h3>
                   <h4 className="font-semibold">Cantidad</h4>

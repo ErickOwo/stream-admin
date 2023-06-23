@@ -9,6 +9,7 @@ const endPoints = {
   platforms: {
     api: `${API}/admin/platforms`,
     profiles: `${API}/admin/profiles`,
+    alias: `${API}/admin/profiles/alias`,
   },
   orders: {
     api: `${API}/admin/orders`,

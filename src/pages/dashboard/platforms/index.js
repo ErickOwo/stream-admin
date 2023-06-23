@@ -17,7 +17,7 @@ const Platforms = () => {
       </div>
       <div className="grid md:grid-cols-2 gap-2">
         {data?.map((platform, index) => (
-          <PlatformCard title={platform.title} password={platform.password} email={platform.email} key={platform._id} id={platform._id} type={platform.type} />
+          <PlatformCard alias={platform.alias} title={platform.title} password={platform.password} email={platform.email} key={platform._id} id={platform._id} type={platform.type} />
         ))}
       </div>
     </div>
