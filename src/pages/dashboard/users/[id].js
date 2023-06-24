@@ -23,6 +23,11 @@ const User = () => {
     const orders = await axios(`${endPoinst.users.api}/orders/${user}`);
     const platformsContainer = await axios(`${endPoinst.users.api}/profiles/${user}`);
 
+    platformsContainer.data.sort((a, b) => {
+      if (a.alias > b.alias) return 1;
+      if (a.alias < b.alias) return -1;
+      return 0;
+    });
     setPlatforms(platformsContainer.data);
     setUser(userData.data);
     setOrders(orders.data);
@@ -52,6 +57,30 @@ const User = () => {
               <div className="flex">
                 <h4 className="font-bold mr-2">Title: </h4>
                 <p>{platform.platformId.title}</p>
+              </div>
+              <div className="flex gap-2 flex-wrap">
+                <h4 className="font-semibold">Alias:</h4>
+                <p
+                  className={`font-semibold ${
+                    platform?.platformId?.type == 0
+                      ? 'text-blue-700'
+                      : platform?.platformId?.type == 1
+                      ? 'text-purple-700'
+                      : platform?.platformId?.type == 2
+                      ? 'text-sky-600'
+                      : platform?.platformId?.type == 3
+                      ? 'text-blue-500'
+                      : platform?.platformId?.type == 4
+                      ? 'text-red-500'
+                      : platform?.platformId?.type == 5
+                      ? 'text-green-800'
+                      : platform?.platformId?.type == 100
+                      ? 'text-red-700'
+                      : 'text-amber-300'
+                  }`}
+                >
+                  {platform?.alias ? platform?.alias : 'Empty'}
+                </p>
               </div>
               <div className="flex">
                 <h4 className="font-bold mr-2">Email: </h4>
@@ -86,10 +115,10 @@ const User = () => {
         <div className="flex flex-col gap-2">
           {orders?.map((order, index) => (
             <div key={index} className="">
-              <div className="flex flex-col bg-[#dfdfdf]">
+              <div className="flex flex-col bg-[#dfdfdf] px-2 py-4">
                 <h4 className="mr-2 font-semibold">No.</h4>
                 <p>{order.orderNumber}</p>
-                <div className="grid grid-cols-7">
+                <div className="grid gap-2 grid-cols-4 md:grid-cols-7 items-end">
                   <h3 className="font-semibold">Cuentas</h3>
                   <h4 className="font-semibold">Cantidad</h4>
                   <h4 className="font-semibold hidden md:flex">Precio</h4>
