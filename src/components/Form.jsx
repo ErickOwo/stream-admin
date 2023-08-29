@@ -21,9 +21,11 @@ const Form = ({ formData, formNewMovie = true, }) => {
     e.preventDefault();
     if (typeStream == null) return setError('Type required')
     const formData = new FormData(formRef.current);
+
     const data = {
       title: formData.get('title'),
       email: formData.get('email'),
+      spotify: formData.get('isSpotify') == "on",
       password: formData.get('password'),
       type: typeStream,
     }
@@ -103,11 +105,17 @@ const Form = ({ formData, formNewMovie = true, }) => {
             label: 'Star+',
           },
           {
+            value: 5,
+            label: 'Spotify',
+          },
+          {
             value: 100,
             label: 'Netflix',
           }
         ]}
         onChange={handleChange} />
+        <label htmlFor='isSpotify'></label>
+        <input type='checkbox' name='isSpotify' id='isSpotify' />
       { error ? <span 
         className='h-6 text-red-600 text-lg mt-3 max-w-[370px] w-5/6'>{ error }</span> : <span 
         className='h-6 mt-3'></span>}

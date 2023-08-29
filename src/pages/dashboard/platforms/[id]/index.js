@@ -83,14 +83,25 @@ const ModifyPlace = () => {
             <span className="font-semibold">Title: </span>
             {platform?.title}
           </h3>
-          <p className="text-xl text-rose-50">
-            <span className="font-semibold">Email: </span>
-            {platform?.email}
-          </p>
-          <p className="text-xl text-rose-50">
-            <span className="font-semibold">Password: </span>
-            {platform?.password}
-          </p>
+          {
+            platform?.spotify ? <>
+              <p className="text-xl text-rose-50">
+                <span className="font-semibold">Link: </span>
+                <a href={platform?.password} target="_blank">
+                  {platform?.password}
+                </a>
+              </p>
+            </> : <>
+              <p className="text-xl text-rose-50">
+                <span className="font-semibold">Email: </span>
+                {platform?.email}
+              </p>
+              <p className="text-xl text-rose-50">
+                <span className="font-semibold">Password: </span>
+                {platform?.password}
+              </p>
+            </>
+          }
         </div>
         <div className="flex flex-col gap-2 text-white">
           <div className="text-xl font-semibold">Customers:</div>
@@ -127,8 +138,8 @@ const ModifyPlace = () => {
             </div>
           ))}
           {((platform?.type == 0 || platform?.type == 4) && customers?.length < 7) ||
-          ((platform?.type == 2 || platform?.type == 3) && customers?.length < 6) ||
-          ((platform?.type != 2 || platform?.type != 3 || platform?.type != 0 || platform?.type != 4) && customers?.length < 5) ? (
+          ((platform?.type == 2 || platform?.type == 3 || platform?.type == 5) && customers?.length < 6) ||
+          ((platform?.type != 2 || platform?.type != 3 || platform?.type != 0 || platform?.type != 4 || platform?.type != 5) && customers?.length < 5) ? (
             <div className="p-2 bg-black  text-white">
               <button className="bg-slate-500 p-2" onClick={() => openModal()}>
                 Add Customer

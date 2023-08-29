@@ -23,6 +23,7 @@ const PlatformCard = ({ title, password, id, email, type }) => {
             type == 2 ? 'Prime Video' :
             type == 3 ? 'Paramount+' :
             type == 4 ? 'Star+' :
+            type == 5 ? 'Spotify' :
              'Neflix' 
           }
       </p>
