@@ -11,10 +11,12 @@ const PlatformCard = ({ title, password, id, email, type }) => {
         <span className='font-bold'>Email: </span>
           {email}
       </p>
-      <p>
+      <div className='flex flex-wrap'>
         <span className='font-bold'>Password: </span>
-          {password}
-      </p>
+        <p className='break-all'>
+          {password}  
+        </p>
+      </div>
       <p>
       <span className='font-bold'>Type: </span>
           {
