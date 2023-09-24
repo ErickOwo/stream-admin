@@ -41,16 +41,16 @@ const Dashboard = () => {
           {modal ? (
             <motion.div className="flex flex-col bg-black absolute  top-12 left-4  w-[165px] overflow-hidden" initial={{ width: 0 }} variants={variantsModal} animate={animationVar ? 'show' : 'hidde'}>
               <Link href="/dashboard/orders/pending">
-                <div className="text-left p-2 hover:bg-white/10">Asign Platforms</div>
+                <div className="text-left p-2 hover:bg-white/10 overflow-hidden block w-[200px] bg-blue-500">Asign Platforms</div>
               </Link>
               <Link href="/dashboard/orders/accepted">
-                <div className="text-left p-2 hover:bg-white/10">Actives</div>
+                <div className="text-left p-2 hover:bg-white/10 overflow-hidden block w-[200px] bg-blue-500">Actives</div>
               </Link>
               <Link href="/dashboard/orders/noactive">
-                <div className="text-left p-2 hover:bg-white/10">Pending Charge</div>
+                <div className="text-left p-2 hover:bg-white/10 overflow-hidden block w-[200px] bg-blue-500">Pending Charge</div>
               </Link>
               <Link href="/dashboard/orders/rejected">
-                <div className="text-left p-2 hover:bg-white/10">Rejected</div>
+                <div className="text-left p-2 hover:bg-white/10 overflow-hidden block w-[200px] bg-blue-500">Rejected</div>
               </Link>
             </motion.div>
           ) : null}
