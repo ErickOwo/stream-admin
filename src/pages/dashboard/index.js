@@ -41,10 +41,13 @@ const Dashboard = () => {
           {modal ? (
             <motion.div className="flex flex-col bg-black absolute  top-12 left-4  w-[165px] overflow-hidden" initial={{ width: 0 }} variants={variantsModal} animate={animationVar ? 'show' : 'hidde'}>
               <Link href="/dashboard/orders/pending">
-                <div className="text-left p-2 hover:bg-white/10">Pendings</div>
+                <div className="text-left p-2 hover:bg-white/10">Asign Platforms</div>
               </Link>
               <Link href="/dashboard/orders/accepted">
-                <div className="text-left p-2 hover:bg-white/10">Accepted</div>
+                <div className="text-left p-2 hover:bg-white/10">Actives</div>
+              </Link>
+              <Link href="/dashboard/orders/noactive">
+                <div className="text-left p-2 hover:bg-white/10">Pending Charge</div>
               </Link>
               <Link href="/dashboard/orders/rejected">
                 <div className="text-left p-2 hover:bg-white/10">Rejected</div>

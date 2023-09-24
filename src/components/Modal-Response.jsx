@@ -5,7 +5,7 @@ import { mailer } from "@api/index";
 import QRCode from 'qrcode.react';
 
 import Select from "react-select";
-import endPoinst from "@api/index";
+import endPoints from "@api/index";
 
 import axios from "axios";
 
@@ -71,7 +71,7 @@ const ModalResponse = ({ active, closeModal, user, platforms, id, order }) => {
   const rejectOrder = async () => {
     try {
       if(!confirm('Are you sure that you want to reject the order?')) return;
-      const response = await axios.patch(endPoinst.orders.api + `/${id}`);
+      const response = await axios.patch(endPoints.orders.api + `/${id}`);
       setMessage({type: "success", text: response.data})
       setTimeout(()=> {
         closeModal();
@@ -102,7 +102,7 @@ const ModalResponse = ({ active, closeModal, user, platforms, id, order }) => {
     }
 
     try {
-      const res = await axios.put(endPoinst.orders.api, data)  
+      const res = await axios.put(endPoints.orders.api, data)  
       setMessage({text: res.data.message, type: 'success'})
     } catch (error) {
       setMessage({type: 'error', text: 'Fallo en la API'})

@@ -19,6 +19,7 @@ const OrdersAccepted = () => {
   const [modalAdd, setModalAdd] = useState(false);
   const [modalAnimationAdd, setModalAnimationAdd] = useState(false);
   const [platforms, setPlatforms] = useState(null);
+  const [updatePayment, setUpdatePayment] = useState(false)
 
   const formRef = useRef(null);
 
@@ -31,7 +32,7 @@ const OrdersAccepted = () => {
 
   useEffect(() => {
     const ejecuteFunction = async () => {
-      const data = await getData(endPoints.orders.api + '/accepted');
+      const data = await getData(endPoints.orders.api + '/noactive');
 
       const getPlatforms = async () => {
         const platformsDB = await getData(`${endPoints.platforms.api}/asign`);
@@ -56,7 +57,8 @@ const OrdersAccepted = () => {
     ejecuteFunction();
   }, []);
 
-  const openModalEdit = async (idOrder) => {
+  const openModalEdit = async (idOrder, updateVar) => {
+    updateVar ? setUpdatePayment(true) : setUpdatePayment(false);
     const { data } = await axios(`${endPoints.orders.api}/${idOrder}`);
     setOrderData(data);
     setModal(true);
@@ -72,13 +74,29 @@ const OrdersAccepted = () => {
     e.preventDefault();
     const formData = new FormData(formRef.current);
 
-    if (formData.get('media').size == 0) {
-      setMessage({ type: 'error', text: 'Please add the image of pay before press change data' });
-      return;
+    if(updatePayment){
+      if (formData.get('media').size == 0) {
+        setMessage({ type: 'error', text: 'Please add the image of pay before press change data' });
+        return;
+      }
     }
 
-    patchMultimedia(endPoints.orders.api + `/update/${orderData.orderDB._id}`, formData)
+    if(updatePayment) patchMultimedia(endPoints.orders.api + `/update/${orderData.orderDB._id}`, formData)
       .then((res) => {
+        setMessage({ text: 'Changes realized successfully', type: 'success' });
+
+        setTimeout(() => {
+          setMessage(null);
+          setImageAdded(false);
+          setModal(false);
+        }, 1000);
+      })
+      .catch((e) => {
+        if (e?.response?.data?.message) {
+          setMessage({ text: e?.response?.data?.message, type: 'error' });
+        } else setMessage({ text: 'Fallo en la API', type: 'error' });
+      });
+      else putObject(endPoints.orders.api + `/acceptpayment/${orderData.orderDB._id}`, formData).then((res) => {
         setMessage({ text: 'Changes realized successfully', type: 'success' });
 
         setTimeout(() => {
@@ -94,8 +112,12 @@ const OrdersAccepted = () => {
       });
   };
 
-  const desactiveOrder = id =>{
-    if(confirm("Are you sure you want to desactive this order?")) putObject(endPoints.orders.api + `/desactive/${id}`)
+  const rejectPayment = id =>{
+    if(confirm("Do you want to reject this payment?")) putObject(endPoints.orders.api + `/rejectpayment/${id}`)
+  }
+
+  const rejectOrder = async id =>{
+    if(confirm('Are you sure that you want to reject the order?')) await axios.patch(endPoints.orders.api + `/${id}`);
   }
 
   const variantsOverlay = {
@@ -177,15 +199,17 @@ const OrdersAccepted = () => {
                 <label htmlFor="startDate">End Date:</label>
                 <input required type="date" name="endDate" id="endDate"></input>
               </div>
-              <label
-                htmlFor="media"
-                className={`my-2 w-full h-[30px] ${
-                  imgAdded ? 'bg-pink-800 hover:bg-pink-700' : 'bg-slate-800 hover:bg-slate-700'
-                } rounded-lg flex justify-center items-center text-lg text-white cursor-pointer`}
-              >
-                Añadir Imagen
-              </label>
-              <input type="file" accept="image/*" name="media" id="media" className="hidden" onChange={handleImg}></input>
+              {updatePayment ? <>
+                <label
+                  htmlFor="media"
+                  className={`my-2 w-full h-[30px] ${
+                    imgAdded ? 'bg-pink-800 hover:bg-pink-700' : 'bg-slate-800 hover:bg-slate-700'
+                  } rounded-lg flex justify-center items-center text-lg text-white cursor-pointer`}
+                >
+                  Añadir Imagen
+                </label>
+                <input type="file" accept="image/*" name="media" id="media" className="hidden" onChange={handleImg}></input>
+              </> : null}
             </form>
             <div className="h-8">{message ? <p className={message.type == 'success' ? 'text-green-600' : message.type == 'info' ? 'text-blue-600' : 'text-red-600'}>{message.text}</p> : null}</div>
             <button
@@ -296,9 +320,9 @@ const OrdersAccepted = () => {
                   </div>
                 ) : null}
                 <div className="flex justify-between pr-2 text-xl font-semibold">
-                  <h4>Estado:</h4>
-                  <p className={`font-sans text-gray-800 tracking-wider ${order.pending ? 'text-yellow-700' : order.accepted ? 'text-green-700' : 'text-red-700'}`}>
-                    {order.pending ? 'Pending' : order.accepted ? 'Accepted' : 'Rejected'}
+                  <h4>Estate:</h4>
+                  <p className={`font-sans text-gray-800 tracking-wider ${order.pending ? 'text-yellow-700' : 'text-red-700'}`}>
+                    {order.pending ? 'Pending To Review Pay' : 'Not paid'}
                   </p>
                 </div>
                 {order.startDate ? (
@@ -316,13 +340,21 @@ const OrdersAccepted = () => {
                 <div className="flex flex-col">
                   <h4 className="text-xl font-semibold">Pago:</h4>
                   <div className="flex justify-center h-[420px] w-full">
-                    <Image src={order.imgURL} width="400%" height="100%" />
+                    <Image src={order.imgRequest ? order.imgRequest :order.imgURL} width="400%" height="100%" />
                   </div>
                 </div>
                 <button
+                  className="bg-green-600 text-white p-2 rounded-lg"
+                  onClick={() => {
+                    openModalEdit(order._id, false);
+                  }}
+                >
+                  Accept Payment
+                </button>
+                <button
                   className="bg-blue-600 text-white p-2 rounded-lg"
                   onClick={() => {
-                    openModalEdit(order._id);
+                    openModalEdit(order._id, true);
                   }}
                 >
                   Update Payment
@@ -330,10 +362,18 @@ const OrdersAccepted = () => {
                 <button
                   className="bg-orange-600 text-white p-2 rounded-lg"
                   onClick={() => {
-                    desactiveOrder(order._id);
+                    rejectPayment(order._id)
                   }}
                 >
-                  Send to pending to charge
+                  Reject Payment
+                </button>
+                <button
+                  className="bg-red-600 text-white p-2 rounded-lg"
+                  onClick={() => {
+                    rejectOrder(order._id)
+                  }}
+                >
+                  Reject Order
                 </button>
               </div>
             ))}

@@ -130,7 +130,11 @@ const AddOrderModal = ({active, modalAnimation, message, platforms, setMessage, 
     {
       value: 3,
       label: 'BAC'
-    }
+    },
+    { value: 4, label: 'G&T Continental' },
+    { value: 5, label: 'Promerica' },
+    { value: 6, label: 'BAM' },
+    { value: 7, label: 'MICOOPE' },
   ]
   
   return (   
