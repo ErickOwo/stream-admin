@@ -32,6 +32,18 @@ const OrdersNoPending = () => {
                   <h3 className="font-semibold">No. de Orden</h3>
                   <p>{order.orderNumber}</p>
                 </div>
+                <div className="flex gap-2">
+                  <p className="font-semibold">Name:</p>
+                  <p>{order.userCustomer.name}</p>
+                </div>
+                <div className="flex gap-2">
+                  <p className="font-semibold">Email:</p>
+                  <p>{order.userCustomer.email}</p>
+                </div>
+                <div className="flex gap-2">
+                  <p className="font-semibold">Phone:</p>
+                  <p>{order.userCustomer.phone}</p>
+                </div>
                 <div className="grid gap-2 grid-cols-4 md:grid-cols-7 items-end">
                   <h3 className="font-semibold">Cuentas</h3>
                   <h4 className="font-semibold">Cantidad</h4>
@@ -79,11 +91,23 @@ const OrdersNoPending = () => {
                   </div>
                 ) : null}
                 <div className="flex justify-between pr-2 text-xl font-semibold">
-                  <h4>Estado:</h4>
+                  <h4>State:</h4>
                   <p className={`font-sans text-gray-800 tracking-wider ${order.pending ? 'text-yellow-700' : order.accepted ? 'text-green-700' : 'text-red-700'}`}>
                     {order.pending ? 'Pending' : order.accepted ? 'Accepted' : 'Rejected'}
                   </p>
                 </div>
+                {order.startDate ? (
+                  <div className="flex flex-wrap text-xl">
+                    <h3 className="font-semibold mr-2">Start Date:</h3>
+                    {order.startDate.substring(0, 10)}
+                  </div>
+                ) : null}
+                {order.endDate ? (
+                  <div className="flex flex-wrap text-xl">
+                    <h3 className="font-semibold mr-2">End Date:</h3>
+                    {order.endDate.substring(0, 10)}
+                  </div>
+                ) : null}
                 <div className="flex flex-col">
                   <h4 className="text-xl font-semibold">Pago:</h4>
                   <div className="flex justify-center h-[420px] w-full">

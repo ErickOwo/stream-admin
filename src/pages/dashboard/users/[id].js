@@ -88,7 +88,7 @@ const User = () => {
               </div>
               <div className="flex">
                 <h4 className="font-bold mr-2">Password: </h4>
-                <p>{platform.platformId.password}</p>
+                <p className='break-all'>{platform.platformId.password}</p>
               </div>
               <div className="flex">
                 <h4 className="font-bold mr-2">Type: </h4>

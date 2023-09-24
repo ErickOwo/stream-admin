@@ -87,7 +87,7 @@ const ModifyPlace = () => {
             platform?.spotify ? <>
               <p className="text-xl text-rose-50">
                 <span className="font-semibold">Link: </span>
-                <a href={platform?.password} target="_blank">
+                <a className='break-all' href={platform?.password} target="_blank">
                   {platform?.password}
                 </a>
               </p>
