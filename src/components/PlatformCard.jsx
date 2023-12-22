@@ -20,13 +20,7 @@ const PlatformCard = ({ title, password, id, email, type }) => {
       <p>
       <span className='font-bold'>Type: </span>
           {
-            type == 0 ? 'Disney+' :
-            type == 1 ? 'HBO MAX' :
-            type == 2 ? 'Prime Video' :
-            type == 3 ? 'Paramount+' :
-            type == 4 ? 'Star+' :
-            type == 5 ? 'Spotify' :
-             'Neflix' 
+            type 
           }
       </p>
       <Link href={`/dashboard/platforms/${id}`}>

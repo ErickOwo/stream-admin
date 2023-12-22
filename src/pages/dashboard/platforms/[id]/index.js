@@ -156,7 +156,7 @@ const ModifyPlace = () => {
           </Link>
           <button
             onClick={() => {
-              if (confirm('Está seguro que desea eliminar la plataforma')) putObject(`${endPoints.platforms.api}/${id}`).then((res) => router.push('/dashboard/platforms'));
+              if (confirm('Are you sure that you want to delete this platform?')) deleteObject(`${endPoints.platforms.api}/${id}`).then((res) => router.push('/dashboard/platforms'));
             }}
             className="mt-4 mr-3 rounded-md text-md py-2 px-3 bg-sky-100 text-gray-800 text white"
           >
