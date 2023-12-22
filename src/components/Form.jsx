@@ -1,16 +1,32 @@
 import { addObject, putObject } from '@api/requests';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import endPoinst from '@api/index';
 import Select from 'react-select';
+import { getData } from '@api/requests';
 
 const Form = ({ formData, formNewMovie = true, }) => {
   const formRef = useRef(null);
   const [error, setError] = useState(null);
   const [typeStream, setTypeStream] = useState(null);
+  const [opcDataBase, setOpcDataBase] = useState([]);
   
   const router = useRouter();
   const { id } = router.query;
+
+  useEffect(()=>{
+    const reqFunc = async () => {
+      const resData = await getData(endPoinst.platforms.accounts);
+      const valuesOpc = resData.map((valueMap,index)=>{
+        return({
+          value: `${valueMap._id}`,
+          label: valueMap.name
+        })
+      })
+      setOpcDataBase(valuesOpc)
+    }
+    reqFunc()
+  },[])
 
   const handleChange = e =>{
     setTypeStream(e.value);
@@ -25,7 +41,6 @@ const Form = ({ formData, formNewMovie = true, }) => {
     const data = {
       title: formData.get('title'),
       email: formData.get('email'),
-      spotify: formData.get('isSpotify') == "on",
       password: formData.get('password'),
       type: typeStream,
     }
@@ -83,39 +98,10 @@ const Form = ({ formData, formNewMovie = true, }) => {
         id="type" 
         name='type' 
         className='max-w-[370px] w-5/6 p-1 outline-slate-600'  
-        options={[
-          {
-            value: 0,
-            label: 'Disney+' 
-          },
-          {
-            value: 1,
-            label: 'HBO MAX' 
-          },
-          {
-            value: 2,
-            label: 'Prime Video' 
-          },
-          {
-            value: 3,
-            label: 'Paramount+' 
-          },
-          {
-            value: 4,
-            label: 'Star+',
-          },
-          {
-            value: 5,
-            label: 'Spotify',
-          },
-          {
-            value: 100,
-            label: 'Netflix',
-          }
-        ]}
+        options={opcDataBase}
         onChange={handleChange} />
         <label htmlFor='isSpotify'></label>
-        <input type='checkbox' name='isSpotify' id='isSpotify' />
+       
       { error ? <span 
         className='h-6 text-red-600 text-lg mt-3 max-w-[370px] w-5/6'>{ error }</span> : <span 
         className='h-6 mt-3'></span>}

@@ -10,6 +10,7 @@ const endPoints = {
     api: `${API}/admin/platforms`,
     profiles: `${API}/admin/profiles`,
     alias: `${API}/admin/profiles/alias`,
+    accounts: `${API}/admin/accounts/types`,
   },
   orders: {
     api: `${API}/admin/orders`,

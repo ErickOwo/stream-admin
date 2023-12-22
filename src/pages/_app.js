@@ -6,7 +6,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <ProviderAuth>
       <Head>
-        <title>Admin Stream Play</title>
+        <title>Stream Play Manager</title>
         <meta name="description" content="Aplication Manager" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
