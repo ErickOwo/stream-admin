@@ -19,7 +19,7 @@ const Form = ({ formData, formNewMovie = true, }) => {
       const resData = await getData(endPoinst.platforms.accounts);
       const valuesOpc = resData.map((valueMap,index)=>{
         return({
-          value: `${valueMap._id}`,
+          value: valueMap._id,
           label: valueMap.name
         })
       })
