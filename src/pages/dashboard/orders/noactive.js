@@ -36,15 +36,15 @@ const OrdersAccepted = () => {
 
       const getPlatforms = async () => {
         const platformsDB = await getData(`${endPoints.platforms.api}/asign`);
-        const platformsNotFilled = platformsDB.filter((platform) => {
-          if (
-            ((platform.type == 0 || platform.type == 4) && platform.profiles.length < 7) ||
-            ((platform.type == 2 || platform.type == 3) && platform.profiles.length < 6) ||
-            ((platform.type != 0 || platform.type != 2 || platform.type != 3 || platform.type != 4) && platform.profiles.length < 5)
-          )
-            return platform;
-        });
-        setPlatforms(platformsNotFilled);
+        // const platformsNotFilled = platformsDB.filter((platform) => {
+        //   if (
+        //     ((platform.type == 0 || platform.type == 4) && platform.profiles.length < 7) ||
+        //     ((platform.type == 2 || platform.type == 3) && platform.profiles.length < 6) ||
+        //     ((platform.type != 0 || platform.type != 2 || platform.type != 3 || platform.type != 4) && platform.profiles.length < 5)
+        //   )
+        //     return platform;
+        // });
+        setPlatforms(platformsDB);
       };
       data.sort((a, b) => {
         const dateA = new Date(a.endDate);
@@ -343,6 +343,12 @@ const OrdersAccepted = () => {
                     <Image src={order.imgRequest ? order.imgRequest :order.imgURL} width="400%" height="100%" />
                   </div>
                 </div>
+                <a 
+                  className='mt-2 bg-yellow-400 py-2 font-semibold text-center'
+                  href={`https://api.whatsapp.com/send/?phone=${true ? "502" : null}${order.userCustomer.phone}&text=¡Hola ${order.userCustomer.name}! Esperamos que estés teniendo un día lleno de alegría. 🌟%0A%0ATe recordamos que tienes una pequeña tarea pendiente con nosotros: tu pago por los fabulosos servicios de Stream Play. El monto es de Q ${order.total}.00 💰, y aunque sabemos que la diversión es invaluable, necesitamos tu colaboración para mantenerla encendida.%0A%0A¡No te preocupes, es muy sencillo! Simplemente sigue este enlace mágico https://stream-play.vercel.app/updatepay/${order?.orderNumber} y tu cuenta estará lista para seguir disfrutando de todas las emocionantes ofertas de entretenimiento que tenemos.%0A%0A¿Tienes alguna consulta? ¡No dudes en preguntar! ¡Agradecemos que formes parte de la comunidad Stream Play! 😊🎮`}
+                  target='_blank' >
+                  Charge
+                </a>
                 <button
                   className="bg-green-600 text-white p-2 rounded-lg"
                   onClick={() => {

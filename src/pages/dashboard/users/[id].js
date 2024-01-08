@@ -15,23 +15,33 @@ const User = () => {
   useEffect(() => {
     if (!router) return;
 
+    const getData = async (user) => {
+      const userData = await axios(`${endPoinst.users.api}/user/${user}`);
+      const orders = await axios(`${endPoinst.users.api}/orders/${user}`);
+      const platformsContainer = await axios(`${endPoinst.users.api}/profiles/${user}`);
+  
+      platformsContainer.data.sort((a, b) => {
+        if (a.alias > b.alias) return 1;
+        if (a.alias < b.alias) return -1;
+        return 0;
+      });
+      setPlatforms(platformsContainer.data);
+      setUser(userData.data);
+      setOrders(orders.data);
+    };
+    
     getData(router.query.id);
   }, [router]);
 
-  const getData = async (user) => {
-    const userData = await axios(`${endPoinst.users.api}/user/${user}`);
-    const orders = await axios(`${endPoinst.users.api}/orders/${user}`);
-    const platformsContainer = await axios(`${endPoinst.users.api}/profiles/${user}`);
 
-    platformsContainer.data.sort((a, b) => {
-      if (a.alias > b.alias) return 1;
-      if (a.alias < b.alias) return -1;
-      return 0;
-    });
-    setPlatforms(platformsContainer.data);
-    setUser(userData.data);
-    setOrders(orders.data);
-  };
+  const readPlatforms = (data)=>{
+    if(!data) return ""
+    let result = ""
+    data.forEach((profile, index) =>{
+      result += `${profile?.platformId?.title}%0Acorreo: ${profile?.platformId?.email}%0Acontraseña: ${profile?.platformId?.password}%0A%0A`
+    })
+    return result
+  }
 
   return (
     <div className="w-full min-h-screen flex gap-3 py-3 flex-col">
@@ -90,7 +100,7 @@ const User = () => {
                 <h4 className="font-bold mr-2">Password: </h4>
                 <p className='break-all'>{platform.platformId.password}</p>
               </div>
-              <div className="flex">
+              <div className="flex mb-2">
                 <h4 className="font-bold mr-2">Type: </h4>
                 <p>
                   {platform.platformId.type == 0
@@ -106,9 +116,25 @@ const User = () => {
                     : 'Neflix'}
                 </p>
               </div>
+              <a 
+                className='bg-white border border-black/60 py-1 px-3'
+                href={`/dashboard/platforms/${platform.platformId._id}`}
+                target='_blank' >
+                Info
+              </a>       
             </div>
           );
         })}
+        <div>
+          <a 
+            className='bg-blue-500 text-white border border-black/60 py-1 px-3'
+            href={
+            `https://api.whatsapp.com/send/?phone=${true ? "502" : null}${user?.phone}&text=Te envio info de tus cuentas 🤩%0A%0A${readPlatforms(platforms)}`
+            }
+            target='_blank' >
+            Send Info to the customer
+          </a> 
+        </div>
       </div>
       <div className="mx-auto flex-col gap-2 max-w-[580px] w-full bg-[#f0f0f0] p-2 rounded-lg">
         <h4 className="font-semibold">Orders.</h4>
@@ -188,6 +214,12 @@ const User = () => {
                     <Image src={order.imgURL} width="400%" height="100%" />
                   </div>
                 </div>
+                <a 
+                  className='mt-2 bg-yellow-400 py-2 font-semibold text-center'
+                  href={`https://api.whatsapp.com/send/?phone=${true ? "502" : null}${user.phone}&text=¡Hola ${user.name}! Esperamos que estés teniendo un día lleno de alegría. 🌟%0A%0ATe recordamos que tienes una pequeña tarea pendiente con nosotros: tu pago por los fabulosos servicios de Stream Play. El monto es de Q ${order.total}.00 💰, y aunque sabemos que la diversión es invaluable, necesitamos tu colaboración para mantenerla encendida.%0A%0A¡No te preocupes, es muy sencillo! Simplemente sigue este enlace mágico https://stream-play.vercel.app/updatepay/${order.orderNumber} y tu cuenta estará lista para seguir disfrutando de todas las emocionantes ofertas de entretenimiento que tenemos.%0A%0A¿Tienes alguna consulta? ¡No dudes en preguntar! ¡Agradecemos que formes parte de la comunidad Stream Play! 😊🎮`}
+                  target='_blank' >
+                  Charge
+                </a>
               </div>
             </div>
           ))}

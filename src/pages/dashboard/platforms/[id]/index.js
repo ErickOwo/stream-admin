@@ -128,6 +128,12 @@ const ModifyPlace = () => {
                 </div>
               </div>
               <div className="flex gap-2 items-center">
+                <a 
+                  className="bg-white text-black p-2 w-[75px] "
+                  href={`/dashboard/users/${customer?.customerId?._id}`}
+                  target='_blank' >
+                  Details
+                </a>
                 <button className="bg-white text-black p-2 w-[70px]" onClick={() => displayAddAlias(customer?._id)}>
                   Edit
                 </button>
@@ -137,9 +143,9 @@ const ModifyPlace = () => {
               </div>
             </div>
           ))}
-          {((platform?.type == 0 || platform?.type == 4) && customers?.length < 7) ||
+          {/* {((platform?.type == 0 || platform?.type == 4) && customers?.length < 7) ||
           ((platform?.type == 2 || platform?.type == 3 || platform?.type == 5) && customers?.length < 6) ||
-          ((platform?.type != 2 || platform?.type != 3 || platform?.type != 0 || platform?.type != 4 || platform?.type != 5) && customers?.length < 5) ? (
+          ((platform?.type != 2 || platform?.type != 3 || platform?.type != 0 || platform?.type != 4 || platform?.type != 5) && customers?.length < 5) */} {true ? ( 
             <div className="p-2 bg-black  text-white">
               <button className="bg-slate-500 p-2" onClick={() => openModal()}>
                 Add Customer
