@@ -247,6 +247,12 @@ const OrdersAccepted = () => {
                     <p className="font-semibold">Phone:</p>
                     <p>{order.userCustomer.phone}</p>
                   </div>
+                  <a 
+                  className='bg-white border border-black/60 w-[115px] py-1 px-3'
+                  href={`/dashboard/users/${order.userCustomer._id}`}
+                  target='_blank' >
+                    More Info
+                  </a>
                 </div>
                 <div className="grid gap-2 grid-cols-4 md:grid-cols-7 items-end">
                   <h3 className="font-semibold">Cuentas</h3>

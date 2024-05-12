@@ -190,6 +190,12 @@ const OrdersAccepted = () => {
               <h4 className="font-semibold">Phone:</h4>
               <p>{orderData.publicUser.phone}</p>
             </div>
+            <a 
+            className='bg-white border border-black/60 w-[115px] py-1 px-3'
+            href={`/dashboard/users/${orderData.publicUser._id}`}
+            target='_blank' >
+              More Info
+            </a>
             <form className="flex flex-col mt-1 p-1 rounded-md border border-black gap-2" id="form" ref={formRef} onSubmit={handleSubmit}>
               <div className="flex gap-2">
                 <label htmlFor="startDate">Star Date:</label>

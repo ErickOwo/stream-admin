@@ -38,7 +38,7 @@ const User = () => {
     if(!data) return ""
     let result = ""
     data.forEach((profile, index) =>{
-      result += `${profile?.platformId?.title}%0Acorreo: ${profile?.platformId?.email}%0Acontraseña: ${profile?.platformId?.password}%0A%0A`
+      result += `${profile?.platformId?.title}%0Aalias: ${profile?.alias ? profile?.alias : 'vacio'}%0Acorreo: ${profile?.platformId?.email}%0Acontraseña: ${profile?.platformId?.password}%0A%0A`
     })
     return result
   }
